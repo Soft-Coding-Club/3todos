@@ -64,11 +64,11 @@ export default function Home() {
   return (
     <main className="relative min-h-screen bg-white overflow-hidden">
       <div className="relative z-10 p-8 max-w-sm">
-        <p className="text-zinc-400 text-sm mb-1">
+        <p className="text-sm text-zinc-400 mb-1">
           {new Date().toISOString().slice(0, 10)}
         </p>
-        <h1 className="text-3xl font-semibold text-zinc-900 mb-1">today&apos;s todos</h1>
-        <p className="text-zinc-400 text-sm mb-6">just 3. no more.</p>
+        <h1 className="text-sm text-zinc-900 mb-1">today&apos;s todos</h1>
+        <p className="text-sm text-zinc-400 mb-6">just 3. no more.</p>
 
         <div className="flex gap-2">
           <input
