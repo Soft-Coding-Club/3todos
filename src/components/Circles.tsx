@@ -70,23 +70,19 @@ export default function Circles({ slots, onToggle, onDelete }: Props) {
             style={{ left: pos.x, top: pos.y }}
           >
             <button
-              onClick={() => slot.kind === "active" && onToggle(i)}
+              onClick={() => slot.kind === "active" && onDelete(i)}
               style={{ width: circleSize, height: circleSize }}
               className={`rounded-full flex items-center justify-center transition text-center p-5 ${
                 slot.kind === "done"
                   ? "bg-purple-500"
                   : slot.kind === "active"
-                  ? slot.todo.done
-                    ? "bg-zinc-900"
-                    : "bg-zinc-100 hover:bg-zinc-200"
+                  ? "bg-zinc-100 hover:bg-zinc-200 active:scale-95"
                   : "bg-zinc-50 border border-dashed border-zinc-200"
               }`}
             >
               {slot.kind === "active" ? (
                 <span
-                  className={`text-sm leading-snug transition ${
-                    slot.todo.done ? "line-through text-zinc-500" : "text-zinc-900"
-                  }`}
+                  className="text-sm leading-snug text-zinc-900"
                   style={{ wordBreak: "break-word" }}
                 >
                   {slot.todo.text}
@@ -95,14 +91,6 @@ export default function Circles({ slots, onToggle, onDelete }: Props) {
                 <span className="text-zinc-300 text-sm">slot {i + 1}</span>
               )}
             </button>
-            {slot.kind === "active" && (
-              <button
-                onClick={() => onDelete(i)}
-                className="absolute -top-1 -right-1 z-10 w-5 h-5 rounded-full bg-white border border-zinc-200 text-zinc-400 hover:text-zinc-700 flex items-center justify-center text-xs leading-none transition"
-              >
-                ×
-              </button>
-            )}
           </div>
         );
       })}
