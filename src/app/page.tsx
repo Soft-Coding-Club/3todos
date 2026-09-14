@@ -64,13 +64,13 @@ export default function Home() {
   return (
     <main className="relative min-h-screen bg-white overflow-hidden">
       <div className="relative z-10 p-8 max-w-sm">
-        <p className="text-sm text-zinc-400 mb-1" suppressHydrationWarning>
+        <p className="text-sm text-zinc-900 mb-1" suppressHydrationWarning>
           {new Date().toISOString().slice(0, 10)}
         </p>
         <h1 className="text-sm text-zinc-900 mb-1">today&apos;s todos</h1>
-        <p className="text-sm text-zinc-400 mb-6">just 3. no more.</p>
+        <p className="text-sm text-zinc-900 mb-6">just 3. no more.</p>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-end">
           <input
             type="text"
             value={input}
@@ -78,19 +78,19 @@ export default function Home() {
             onKeyDown={(e) => e.key === "Enter" && !e.nativeEvent.isComposing && addTodo()}
             placeholder={isFull ? "that's enough for today." : "add a task..."}
             disabled={isFull}
-            className="flex-1 bg-zinc-100 text-zinc-900 placeholder-zinc-400 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-zinc-300 disabled:opacity-40 transition"
+            className="flex-1 bg-transparent text-zinc-900 placeholder-zinc-900 py-2 text-sm outline-none border-b border-zinc-900 disabled:opacity-30 transition"
           />
           <button
             onClick={addTodo}
             disabled={isFull || !input.trim()}
-            className="bg-zinc-900 text-white font-medium px-5 py-3 text-sm disabled:opacity-30 hover:bg-zinc-700 active:scale-95 transition"
+            className="text-zinc-900 text-sm disabled:opacity-30 pb-2 hover:opacity-60 active:scale-95 transition"
           >
             add
           </button>
         </div>
 
         {activeTodos.length > 0 && (
-          <div className="mt-4 text-xs text-zinc-400">
+          <div className="mt-4 text-xs text-zinc-900">
             {doneTodos.length > 0 && (
               <span>{doneTodos.length} completed · </span>
             )}

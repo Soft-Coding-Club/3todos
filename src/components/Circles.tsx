@@ -88,7 +88,7 @@ export default function Circles({ slots, onToggle, onDelete }: Props) {
                   {slot.todo.text}
                 </span>
               ) : slot.kind === "done" ? null : (
-                <span className="text-zinc-300 text-sm">slot {i + 1}</span>
+                <span className="text-zinc-900 text-sm opacity-20">slot {i + 1}</span>
               )}
             </button>
           </div>
