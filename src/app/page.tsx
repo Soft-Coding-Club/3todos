@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 
 interface Todo {
   id: number;
@@ -8,22 +8,41 @@ interface Todo {
   done: boolean;
 }
 
-const CIRCLE_SIZE = 128; // px (w-32)
+const CIRCLE_SIZE = 128;
+const MIN_DIST = CIRCLE_SIZE + 24;
 
-function randomPositions() {
-  const vw = typeof window !== "undefined" ? window.innerWidth : 800;
-  const vh = typeof window !== "undefined" ? window.innerHeight : 600;
+function generatePositions(vw: number, vh: number) {
   const margin = CIRCLE_SIZE / 2 + 16;
-  return [0, 1, 2].map(() => ({
-    x: Math.random() * (vw - CIRCLE_SIZE - margin * 2) + margin,
-    y: Math.random() * (vh - CIRCLE_SIZE - margin * 2) + margin,
-  }));
+  const maxX = vw - CIRCLE_SIZE - margin;
+  const maxY = vh - CIRCLE_SIZE - margin;
+  const result: { x: number; y: number }[] = [];
+
+  for (let i = 0; i < 3; i++) {
+    let pos = { x: 0, y: 0 };
+    let attempts = 0;
+    do {
+      pos = {
+        x: Math.random() * (maxX - margin) + margin,
+        y: Math.random() * (maxY - margin) + margin,
+      };
+      attempts++;
+    } while (
+      attempts < 200 &&
+      result.some((p) => Math.hypot(p.x - pos.x, p.y - pos.y) < MIN_DIST)
+    );
+    result.push(pos);
+  }
+  return result;
 }
 
 export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [input, setInput] = useState("");
-  const positions = useMemo(() => randomPositions(), []);
+  const [positions, setPositions] = useState<{ x: number; y: number }[] | null>(null);
+
+  useEffect(() => {
+    setPositions(generatePositions(window.innerWidth, window.innerHeight));
+  }, []);
 
   const addTodo = () => {
     const trimmed = input.trim();
@@ -79,7 +98,7 @@ export default function Home() {
       </div>
 
       {/* 랜덤 위치 원형 슬롯 */}
-      {[0, 1, 2].map((i) => {
+      {positions && [0, 1, 2].map((i) => {
         const todo = todos[i];
         const pos = positions[i];
         return (
