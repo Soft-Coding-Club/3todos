@@ -8,13 +8,17 @@ interface Todo {
   done: boolean;
 }
 
-const CIRCLE_SIZE = 128;
-const MIN_DIST = CIRCLE_SIZE + 24;
+function getCircleSize(vw: number) {
+  if (vw < 480) return 160;
+  if (vw < 768) return 200;
+  return 240;
+}
 
-function generatePositions(vw: number, vh: number) {
-  const margin = CIRCLE_SIZE / 2 + 16;
-  const maxX = vw - CIRCLE_SIZE - margin;
-  const maxY = vh - CIRCLE_SIZE - margin;
+function generatePositions(vw: number, vh: number, size: number) {
+  const minDist = size + 24;
+  const margin = size / 2 + 16;
+  const maxX = vw - size - margin;
+  const maxY = vh - size - margin;
   const result: { x: number; y: number }[] = [];
 
   for (let i = 0; i < 3; i++) {
@@ -28,7 +32,7 @@ function generatePositions(vw: number, vh: number) {
       attempts++;
     } while (
       attempts < 200 &&
-      result.some((p) => Math.hypot(p.x - pos.x, p.y - pos.y) < MIN_DIST)
+      result.some((p) => Math.hypot(p.x - pos.x, p.y - pos.y) < minDist)
     );
     result.push(pos);
   }
@@ -43,9 +47,14 @@ interface Props {
 
 export default function Circles({ todos, onToggle, onDelete }: Props) {
   const [positions, setPositions] = useState<{ x: number; y: number }[]>([]);
+  const [circleSize, setCircleSize] = useState(200);
 
   useEffect(() => {
-    setPositions(generatePositions(window.innerWidth, window.innerHeight));
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const size = getCircleSize(vw);
+    setCircleSize(size);
+    setPositions(generatePositions(vw, vh, size));
   }, []);
 
   if (positions.length === 0) return null;
@@ -63,7 +72,8 @@ export default function Circles({ todos, onToggle, onDelete }: Props) {
           >
             <button
               onClick={() => todo && onToggle(todo.id)}
-              className={`w-32 h-32 rounded-full flex items-center justify-center transition text-center p-4 ${
+              style={{ width: circleSize, height: circleSize }}
+              className={`rounded-full flex items-center justify-center transition text-center p-5 ${
                 todo
                   ? todo.done
                     ? "bg-zinc-900"
@@ -73,7 +83,7 @@ export default function Circles({ todos, onToggle, onDelete }: Props) {
             >
               {todo ? (
                 <span
-                  className={`text-xs leading-snug transition ${
+                  className={`text-sm leading-snug transition ${
                     todo.done ? "line-through text-zinc-500" : "text-zinc-900"
                   }`}
                   style={{ wordBreak: "break-word" }}
@@ -81,7 +91,7 @@ export default function Circles({ todos, onToggle, onDelete }: Props) {
                   {todo.text}
                 </span>
               ) : (
-                <span className="text-zinc-300 text-xs">slot {i + 1}</span>
+                <span className="text-zinc-300 text-sm">slot {i + 1}</span>
               )}
             </button>
             {todo && (
