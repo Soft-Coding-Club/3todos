@@ -32,8 +32,8 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <h1 className="text-3xl font-bold text-zinc-900 mb-1">오늘의 할일</h1>
-        <p className="text-zinc-400 text-sm mb-8">딱 3개만. 더는 안 돼요.</p>
+        <h1 className="text-3xl font-semibold text-zinc-900 mb-1">today&apos;s todos</h1>
+        <p className="text-zinc-400 text-sm mb-8">just 3. no more.</p>
 
         <div className="flex gap-2 mb-6">
           <input
@@ -41,16 +41,16 @@ export default function Home() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && addTodo()}
-            placeholder={isFull ? "오늘 할 일은 다 정했어요!" : "할 일을 입력하세요"}
+            placeholder={isFull ? "that's enough for today." : "add a task..."}
             disabled={isFull}
             className="flex-1 bg-zinc-100 text-zinc-900 placeholder-zinc-400 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-zinc-300 disabled:opacity-40 transition"
           />
           <button
             onClick={addTodo}
             disabled={isFull || !input.trim()}
-            className="bg-zinc-900 text-white font-semibold px-5 py-3 rounded-xl text-sm disabled:opacity-30 hover:bg-zinc-700 active:scale-95 transition"
+            className="bg-zinc-900 text-white font-medium px-5 py-3 rounded-xl text-sm disabled:opacity-30 hover:bg-zinc-700 active:scale-95 transition"
           >
-            추가
+            add
           </button>
         </div>
 
@@ -103,7 +103,7 @@ export default function Home() {
                     </button>
                   </>
                 ) : (
-                  <span className="text-zinc-300 text-sm">빈 슬롯 {i + 1}</span>
+                  <span className="text-zinc-300 text-sm">slot {i + 1}</span>
                 )}
               </div>
             );
@@ -112,9 +112,9 @@ export default function Home() {
 
         {todos.length > 0 && (
           <div className="mt-6 flex justify-between items-center text-xs text-zinc-400">
-            <span>{todos.filter((t) => t.done).length}/{todos.length} 완료</span>
+            <span>{todos.filter((t) => t.done).length}/{todos.length} done</span>
             {todos.length === 3 && todos.every((t) => t.done) && (
-              <span className="text-zinc-900 font-medium">오늘 할 일 다 했어요! 🎉</span>
+              <span className="text-zinc-900 font-medium">all done for today!</span>
             )}
           </div>
         )}
