@@ -75,7 +75,7 @@ export default function Home() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && addTodo()}
+            onKeyDown={(e) => e.key === "Enter" && !e.nativeEvent.isComposing && addTodo()}
             placeholder={isFull ? "that's enough for today." : "add a task..."}
             disabled={isFull}
             className="flex-1 bg-zinc-100 text-zinc-900 placeholder-zinc-400 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-zinc-300 disabled:opacity-40 transition"
