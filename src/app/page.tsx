@@ -4,34 +4,62 @@ import { useState, useEffect } from "react";
 import Circles from "@/components/Circles";
 
 interface Todo {
-  id: number;
   text: string;
   done: boolean;
 }
 
+export type SlotState =
+  | { kind: "empty" }
+  | { kind: "active"; todo: Todo }
+  | { kind: "done" };
+
+const INITIAL_SLOTS: SlotState[] = [
+  { kind: "empty" },
+  { kind: "empty" },
+  { kind: "empty" },
+];
+
 export default function Home() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [slots, setSlots] = useState<SlotState[]>(INITIAL_SLOTS);
   const [input, setInput] = useState("");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
+  const isFull = slots.every((s) => s.kind !== "empty");
+
   const addTodo = () => {
     const trimmed = input.trim();
-    if (!trimmed || todos.length >= 3) return;
-    setTodos([...todos, { id: Date.now(), text: trimmed, done: false }]);
+    if (!trimmed || isFull) return;
+    setSlots((prev) => {
+      const next = [...prev];
+      const idx = next.findIndex((s) => s.kind === "empty");
+      next[idx] = { kind: "active", todo: { text: trimmed, done: false } };
+      return next;
+    });
     setInput("");
   };
 
-  const toggleTodo = (id: number) => {
-    setTodos(todos.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
+  const toggleSlot = (i: number) => {
+    setSlots((prev) => {
+      const next = [...prev];
+      const slot = next[i];
+      if (slot.kind !== "active") return prev;
+      next[i] = { kind: "active", todo: { ...slot.todo, done: !slot.todo.done } };
+      return next;
+    });
   };
 
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter((t) => t.id !== id));
+  const deleteSlot = (i: number) => {
+    setSlots((prev) => {
+      const next = [...prev];
+      next[i] = { kind: "done" };
+      return next;
+    });
   };
 
-  const isFull = todos.length >= 3;
+  const activeTodos = slots.filter((s) => s.kind === "active");
+  const doneTodos = slots.filter((s) => s.kind === "done");
 
   return (
     <main className="relative min-h-screen bg-white overflow-hidden">
@@ -58,17 +86,17 @@ export default function Home() {
           </button>
         </div>
 
-        {todos.length > 0 && (
-          <div className="mt-4 flex justify-between items-center text-xs text-zinc-400">
-            <span>{todos.filter((t) => t.done).length}/{todos.length} done</span>
-            {todos.length === 3 && todos.every((t) => t.done) && (
-              <span className="text-zinc-900 font-medium">all done for today!</span>
+        {activeTodos.length > 0 && (
+          <div className="mt-4 text-xs text-zinc-400">
+            {doneTodos.length > 0 && (
+              <span>{doneTodos.length} completed · </span>
             )}
+            <span>{activeTodos.filter((s) => s.kind === "active" && s.todo.done).length}/{activeTodos.length} checked</span>
           </div>
         )}
       </div>
 
-      {mounted && <Circles todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} />}
+      {mounted && <Circles slots={slots} onToggle={toggleSlot} onDelete={deleteSlot} />}
     </main>
   );
 }

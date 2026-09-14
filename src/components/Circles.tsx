@@ -1,12 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
-interface Todo {
-  id: number;
-  text: string;
-  done: boolean;
-}
+import type { SlotState } from "@/app/page";
 
 function getCircleSize(vw: number) {
   if (vw < 480) return 160;
@@ -15,10 +10,15 @@ function getCircleSize(vw: number) {
 }
 
 function generatePositions(vw: number, vh: number, size: number) {
-  const minDist = size + 24;
-  const margin = size / 2 + 16;
-  const maxX = vw - size - margin;
-  const maxY = vh - size - margin;
+  const HEADER_H = 160;
+  const PAD = 16;
+  const minDist = size + 8;
+
+  const minX = PAD;
+  const maxX = vw - size - PAD;
+  const minY = HEADER_H;
+  const maxY = vh - size - PAD;
+
   const result: { x: number; y: number }[] = [];
 
   for (let i = 0; i < 3; i++) {
@@ -26,12 +26,12 @@ function generatePositions(vw: number, vh: number, size: number) {
     let attempts = 0;
     do {
       pos = {
-        x: Math.random() * (maxX - margin) + margin,
-        y: Math.random() * (maxY - margin) + margin,
+        x: Math.random() * (maxX - minX) + minX,
+        y: Math.random() * (maxY - minY) + minY,
       };
       attempts++;
     } while (
-      attempts < 200 &&
+      attempts < 300 &&
       result.some((p) => Math.hypot(p.x - pos.x, p.y - pos.y) < minDist)
     );
     result.push(pos);
@@ -40,12 +40,12 @@ function generatePositions(vw: number, vh: number, size: number) {
 }
 
 interface Props {
-  todos: Todo[];
-  onToggle: (id: number) => void;
-  onDelete: (id: number) => void;
+  slots: SlotState[];
+  onToggle: (i: number) => void;
+  onDelete: (i: number) => void;
 }
 
-export default function Circles({ todos, onToggle, onDelete }: Props) {
+export default function Circles({ slots, onToggle, onDelete }: Props) {
   const [positions, setPositions] = useState<{ x: number; y: number }[]>([]);
   const [circleSize, setCircleSize] = useState(200);
 
@@ -61,8 +61,7 @@ export default function Circles({ todos, onToggle, onDelete }: Props) {
 
   return (
     <>
-      {[0, 1, 2].map((i) => {
-        const todo = todos[i];
+      {slots.map((slot, i) => {
         const pos = positions[i];
         return (
           <div
@@ -71,33 +70,35 @@ export default function Circles({ todos, onToggle, onDelete }: Props) {
             style={{ left: pos.x, top: pos.y }}
           >
             <button
-              onClick={() => todo && onToggle(todo.id)}
+              onClick={() => slot.kind === "active" && onToggle(i)}
               style={{ width: circleSize, height: circleSize }}
               className={`rounded-full flex items-center justify-center transition text-center p-5 ${
-                todo
-                  ? todo.done
+                slot.kind === "done"
+                  ? "bg-purple-500"
+                  : slot.kind === "active"
+                  ? slot.todo.done
                     ? "bg-zinc-900"
                     : "bg-zinc-100 hover:bg-zinc-200"
                   : "bg-zinc-50 border border-dashed border-zinc-200"
               }`}
             >
-              {todo ? (
+              {slot.kind === "active" ? (
                 <span
                   className={`text-sm leading-snug transition ${
-                    todo.done ? "line-through text-zinc-500" : "text-zinc-900"
+                    slot.todo.done ? "line-through text-zinc-500" : "text-zinc-900"
                   }`}
                   style={{ wordBreak: "break-word" }}
                 >
-                  {todo.text}
+                  {slot.todo.text}
                 </span>
-              ) : (
+              ) : slot.kind === "done" ? null : (
                 <span className="text-zinc-300 text-sm">slot {i + 1}</span>
               )}
             </button>
-            {todo && (
+            {slot.kind === "active" && (
               <button
-                onClick={() => onDelete(todo.id)}
-                className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-white border border-zinc-200 text-zinc-400 hover:text-zinc-700 flex items-center justify-center text-xs leading-none transition"
+                onClick={() => onDelete(i)}
+                className="absolute -top-1 -right-1 z-10 w-5 h-5 rounded-full bg-white border border-zinc-200 text-zinc-400 hover:text-zinc-700 flex items-center justify-center text-xs leading-none transition"
               >
                 ×
               </button>
