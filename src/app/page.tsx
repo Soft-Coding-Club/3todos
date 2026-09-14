@@ -54,56 +54,41 @@ export default function Home() {
           </button>
         </div>
 
-        <div className="space-y-3">
+        <div className="flex gap-4 justify-center">
           {[0, 1, 2].map((i) => {
             const todo = todos[i];
             return (
-              <div
-                key={i}
-                className={`flex items-center gap-3 px-4 py-4 transition ${
-                  todo
-                    ? "bg-zinc-100"
-                    : "bg-zinc-50 border border-dashed border-zinc-200"
-                }`}
-              >
-                {todo ? (
-                  <>
-                    <button
-                      onClick={() => toggleTodo(todo.id)}
-                      className={`w-5 h-5 border-2 flex-shrink-0 flex items-center justify-center transition ${
-                        todo.done
-                          ? "bg-zinc-900 border-zinc-900"
-                          : "border-zinc-300 hover:border-zinc-500"
-                      }`}
-                    >
-                      {todo.done && (
-                        <svg className="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none">
-                          <path
-                            d="M2 6l3 3 5-5"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      )}
-                    </button>
+              <div key={i} className="relative">
+                <button
+                  onClick={() => todo && toggleTodo(todo.id)}
+                  className={`w-32 h-32 rounded-full flex items-center justify-center transition text-center p-4 ${
+                    todo
+                      ? todo.done
+                        ? "bg-zinc-900"
+                        : "bg-zinc-100 hover:bg-zinc-200"
+                      : "bg-zinc-50 border border-dashed border-zinc-200"
+                  }`}
+                >
+                  {todo ? (
                     <span
-                      className={`flex-1 text-sm transition ${
-                        todo.done ? "line-through text-zinc-400" : "text-zinc-900"
+                      className={`text-xs leading-snug break-words transition ${
+                        todo.done ? "line-through text-zinc-500" : "text-zinc-900"
                       }`}
+                      style={{ wordBreak: "break-word" }}
                     >
                       {todo.text}
                     </span>
-                    <button
-                      onClick={() => deleteTodo(todo.id)}
-                      className="text-zinc-300 hover:text-zinc-500 transition text-lg leading-none"
-                    >
-                      ×
-                    </button>
-                  </>
-                ) : (
-                  <span className="text-zinc-300 text-sm">slot {i + 1}</span>
+                  ) : (
+                    <span className="text-zinc-300 text-xs">slot {i + 1}</span>
+                  )}
+                </button>
+                {todo && (
+                  <button
+                    onClick={() => deleteTodo(todo.id)}
+                    className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-white border border-zinc-200 text-zinc-400 hover:text-zinc-700 flex items-center justify-center text-xs leading-none transition"
+                  >
+                    ×
+                  </button>
                 )}
               </div>
             );
