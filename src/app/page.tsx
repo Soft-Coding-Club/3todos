@@ -43,12 +43,12 @@ export default function Home() {
             onKeyDown={(e) => e.key === "Enter" && addTodo()}
             placeholder={isFull ? "that's enough for today." : "add a task..."}
             disabled={isFull}
-            className="flex-1 bg-zinc-100 text-zinc-900 placeholder-zinc-400 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-zinc-300 disabled:opacity-40 transition"
+            className="flex-1 bg-zinc-100 text-zinc-900 placeholder-zinc-400 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-zinc-300 disabled:opacity-40 transition"
           />
           <button
             onClick={addTodo}
             disabled={isFull || !input.trim()}
-            className="bg-zinc-900 text-white font-medium px-5 py-3 rounded-xl text-sm disabled:opacity-30 hover:bg-zinc-700 active:scale-95 transition"
+            className="bg-zinc-900 text-white font-medium px-5 py-3 text-sm disabled:opacity-30 hover:bg-zinc-700 active:scale-95 transition"
           >
             add
           </button>
@@ -60,7 +60,7 @@ export default function Home() {
             return (
               <div
                 key={i}
-                className={`flex items-center gap-3 rounded-2xl px-4 py-4 transition ${
+                className={`flex items-center gap-3 px-4 py-4 transition ${
                   todo
                     ? "bg-zinc-100"
                     : "bg-zinc-50 border border-dashed border-zinc-200"
@@ -70,7 +70,7 @@ export default function Home() {
                   <>
                     <button
                       onClick={() => toggleTodo(todo.id)}
-                      className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition ${
+                      className={`w-5 h-5 border-2 flex-shrink-0 flex items-center justify-center transition ${
                         todo.done
                           ? "bg-zinc-900 border-zinc-900"
                           : "border-zinc-300 hover:border-zinc-500"
