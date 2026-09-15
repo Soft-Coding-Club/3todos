@@ -83,9 +83,9 @@ export default function Home() {
           <button
             onClick={addTodo}
             disabled={isFull || !input.trim()}
-            className="text-zinc-900 text-sm disabled:opacity-30 pb-2 hover:opacity-60 active:scale-95 transition"
+            className="text-zinc-900 text-xl leading-none disabled:opacity-30 pb-2 hover:opacity-60 active:scale-95 transition"
           >
-            add
+            +
           </button>
         </div>
 
