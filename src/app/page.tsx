@@ -23,8 +23,16 @@ export default function Home() {
   const [slots, setSlots] = useState<SlotState[]>(INITIAL_SLOTS);
   const [input, setInput] = useState("");
   const [mounted, setMounted] = useState(false);
+  const [time, setTime] = useState("");
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+    const tick = () =>
+      setTime(new Date().toLocaleTimeString("ko-KR", { timeZone: "Asia/Seoul", hour12: false }));
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
 
   const isFull = slots.every((s) => s.kind !== "empty");
 
@@ -65,7 +73,7 @@ export default function Home() {
     <main className="relative min-h-screen bg-white overflow-hidden">
       <div className="relative z-10 p-8 max-w-sm">
         <p className="text-sm text-zinc-900 mb-1" suppressHydrationWarning>
-          {new Date().toISOString().slice(0, 10)}
+          {new Date().toISOString().slice(0, 10)}{time ? ` ${time}` : ""}
         </p>
         <h1 className="text-sm text-zinc-900 mb-1">today&apos;s todos</h1>
         <p className="text-sm text-zinc-900 mb-6">just 3. no more.</p>
