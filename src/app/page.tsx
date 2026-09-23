@@ -73,12 +73,12 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen bg-white overflow-hidden">
-      <div className="relative z-10 p-8 max-w-sm">
-        <p className="text-sm text-zinc-900 mb-1" suppressHydrationWarning>
+      <div className="relative z-10 p-4 sm:p-8 max-w-sm">
+        <p className="text-xs sm:text-sm text-zinc-900 mb-1" suppressHydrationWarning>
           {new Date().toISOString().slice(0, 10)}{time ? ` ${time}` : ""}
         </p>
-        <h1 className="text-sm text-zinc-900 mb-1">today&apos;s todos</h1>
-        <p className="text-sm text-zinc-900 mb-6">just 3. no more.</p>
+        <h1 className="text-xs sm:text-sm text-zinc-900 mb-1">today&apos;s todos</h1>
+        <p className="text-xs sm:text-sm text-zinc-900 mb-4 sm:mb-6">just 3. no more.</p>
 
         <div className="flex gap-2 items-end">
           <input
@@ -88,19 +88,19 @@ export default function Home() {
             onKeyDown={(e) => e.key === "Enter" && !e.nativeEvent.isComposing && addTodo()}
             placeholder={isFull ? "that's enough for today." : "add a task..."}
             disabled={isFull}
-            className="flex-1 bg-transparent text-zinc-900 placeholder-zinc-900 py-2 text-sm outline-none border-b border-zinc-900 disabled:opacity-30 transition"
+            className="flex-1 bg-transparent text-zinc-900 placeholder-zinc-900 py-1.5 sm:py-2 text-xs sm:text-sm outline-none border-b border-zinc-900 disabled:opacity-30 transition"
           />
           <button
             onClick={addTodo}
             disabled={isFull || !input.trim()}
-            className="text-zinc-900 text-xl leading-none disabled:opacity-30 pb-2 hover:opacity-60 active:scale-95 transition"
+            className="text-zinc-900 text-lg sm:text-xl leading-none disabled:opacity-30 pb-1.5 sm:pb-2 hover:opacity-60 active:scale-95 transition"
           >
             +
           </button>
         </div>
 
         {activeTodos.length > 0 && (
-          <div className="mt-4 text-xs text-zinc-900">
+          <div className="mt-3 sm:mt-4 text-xs text-zinc-900">
             {doneTodos.length > 0 && (
               <span>{doneTodos.length} completed · </span>
             )}
@@ -111,10 +111,10 @@ export default function Home() {
 
       {mounted && <Circles slots={slots} onToggle={toggleSlot} onDelete={deleteSlot} />}
 
-      <footer className="absolute bottom-0 left-0 w-full p-8 z-10 space-y-1.5">
-        <p className="text-sm text-zinc-900">© 2026. Euna&apos;s Writing. All rights reserved.</p>
-        <p className="text-sm text-zinc-900">Inquiries <span style={{ fontFamily: "initial" }}>☞</span> ajangeunajang@gmail.com</p>
-        <p className="text-sm text-zinc-900">
+      <footer className="absolute bottom-0 left-0 w-full p-4 sm:p-8 z-10 space-y-1 sm:space-y-1.5">
+        <p className="text-xs sm:text-sm text-zinc-900">© 2026. Euna&apos;s Writing. All rights reserved.</p>
+        <p className="text-xs sm:text-sm text-zinc-900">Inquiries <span style={{ fontFamily: "initial" }}>☞</span> ajangeunajang@gmail.com</p>
+        <p className="text-xs sm:text-sm text-zinc-900">
           Design and Developed by{" "}
           <a href="https://www.ajangeunajang.com/" target="_blank" rel="noopener" className="no-underline" style={{ borderBottom: "1px dotted currentColor", paddingBottom: "2px" }}>
             Euna Jang
