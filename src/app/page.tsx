@@ -11,7 +11,7 @@ interface Todo {
 export type SlotState =
   | { kind: "empty" }
   | { kind: "active"; todo: Todo }
-  | { kind: "done" };
+  | { kind: "done"; todo: Todo };
 
 const INITIAL_SLOTS: SlotState[] = [
   { kind: "empty" },
@@ -28,7 +28,7 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
     const tick = () =>
-      setTime(new Date().toLocaleTimeString("ko-KR", { timeZone: "Asia/Seoul", hour12: false }));
+      setTime(new Date().toLocaleTimeString("en-GB", { timeZone: "Asia/Seoul", hour12: false }));
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
@@ -61,7 +61,9 @@ export default function Home() {
   const deleteSlot = (i: number) => {
     setSlots((prev) => {
       const next = [...prev];
-      next[i] = { kind: "done" };
+      const slot = next[i];
+      if (slot.kind !== "active") return prev;
+      next[i] = { kind: "done", todo: slot.todo };
       return next;
     });
   };
@@ -108,6 +110,17 @@ export default function Home() {
       </div>
 
       {mounted && <Circles slots={slots} onToggle={toggleSlot} onDelete={deleteSlot} />}
+
+      <footer className="absolute bottom-0 left-0 w-full p-8 z-10 space-y-1.5">
+        <p className="text-sm text-zinc-900">© 2026. Euna&apos;s Writing. All rights reserved.</p>
+        <p className="text-sm text-zinc-900">Inquiries <span style={{ fontFamily: "initial" }}>☞</span> ajangeunajang@gmail.com</p>
+        <p className="text-sm text-zinc-900">
+          Design and Developed by{" "}
+          <a href="https://www.ajangeunajang.com/" target="_blank" rel="noopener" className="no-underline" style={{ borderBottom: "1px dotted currentColor", paddingBottom: "2px" }}>
+            Euna Jang
+          </a>
+        </p>
+      </footer>
     </main>
   );
 }
