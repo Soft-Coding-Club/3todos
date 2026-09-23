@@ -9,8 +9,21 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://3todos.vercel.app"),
   title: "3todos",
-  description: "Only 3 todos. That's it.",
+  description: "three things.",
+  openGraph: {
+    title: "3todos",
+    description: "three things.",
+    url: "https://3todos.vercel.app",
+    images: [{ url: "/og2.jpg" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "3todos",
+    description: "three things.",
+    images: ["/og2.jpg"],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
