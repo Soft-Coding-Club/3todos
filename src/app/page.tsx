@@ -78,7 +78,7 @@ export default function Home() {
     const blob = await res.blob();
     const file = new File([blob], "3todos.png", { type: "image/png" });
     if (navigator.canShare?.({ files: [file] })) {
-      await navigator.share({ files: [file], title: "3todos", text: "3/3. you did it." });
+      await navigator.share({ files: [file], title: "3todos", text: "3/3. you did it.", url: "https://3todos.vercel.app" });
     } else {
       const a = document.createElement("a");
       a.href = dataUrl;
