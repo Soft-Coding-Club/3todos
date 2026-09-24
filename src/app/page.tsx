@@ -132,11 +132,11 @@ export default function Home() {
 
       {allDone && (
         <div
-          className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+          className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none bg-white/30 backdrop-blur-md"
           style={{ animation: "fadeIn 0.8s ease forwards" }}
         >
           <div className="text-center pointer-events-auto">
-            <p className="text-xs sm:text-sm text-zinc-400 mb-4">3/3. you did it.</p>
+            <p className="text-xs sm:text-sm text-zinc-900 mb-4">3/3. you did it.</p>
             <button
               onClick={handleShare}
               className="text-xs sm:text-sm text-zinc-900 border-b border-zinc-900 pb-0.5 hover:opacity-50 active:scale-95 transition"
