@@ -113,7 +113,7 @@ export default function Home() {
 
       <footer className="absolute bottom-0 left-0 w-full p-4 sm:p-8 z-10 space-y-1 sm:space-y-1.5">
         <p className="text-xs sm:text-sm text-zinc-900">© 2026. Euna&apos;s Writing. All rights reserved.</p>
-        <p className="text-xs sm:text-sm text-zinc-900">Inquiries <span style={{ fontFamily: "initial" }}>☞</span> ajangeunajang@gmail.com</p>
+        <p className="text-xs sm:text-sm text-zinc-900">Inquiries <span style={{ fontFamily: "sans-serif" }}>☞</span> ajangeunajang@gmail.com</p>
         <p className="text-xs sm:text-sm text-zinc-900">
           Design and Developed by{" "}
           <a href="https://www.ajangeunajang.com/" target="_blank" rel="noopener" className="no-underline" style={{ borderBottom: "1px dotted currentColor", paddingBottom: "2px" }}>

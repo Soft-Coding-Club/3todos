@@ -9,6 +9,9 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
+  other: {
+    "format-detection": "telephone=no, date=no, email=no, address=no",
+  },
   metadataBase: new URL("https://3todos.vercel.app"),
   title: "3todos",
   description: "three things.",
