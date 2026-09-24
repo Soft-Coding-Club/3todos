@@ -72,26 +72,19 @@ export default function Home() {
 
   const handleShare = async () => {
     if (!mainRef.current) return;
-    const html2canvas = (await import("html2canvas")).default;
-    const canvas = await html2canvas(mainRef.current, {
-      backgroundColor: "#ffffff",
-      scale: 2,
-      useCORS: true,
-    });
-    canvas.toBlob(async (blob) => {
-      if (!blob) return;
-      const file = new File([blob], "3todos.png", { type: "image/png" });
-      if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: "3todos", text: "three things. done." });
-      } else {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "3todos.png";
-        a.click();
-        URL.revokeObjectURL(url);
-      }
-    }, "image/png");
+    const { toPng } = await import("html-to-image");
+    const dataUrl = await toPng(mainRef.current, { pixelRatio: 2 });
+    const res = await fetch(dataUrl);
+    const blob = await res.blob();
+    const file = new File([blob], "3todos.png", { type: "image/png" });
+    if (navigator.canShare?.({ files: [file] })) {
+      await navigator.share({ files: [file], title: "3todos", text: "3/3. you did it." });
+    } else {
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = "3todos.png";
+      a.click();
+    }
   };
 
   const activeTodos = slots.filter((s) => s.kind === "active");
@@ -143,7 +136,7 @@ export default function Home() {
           style={{ animation: "fadeIn 0.8s ease forwards" }}
         >
           <div className="text-center pointer-events-auto">
-            <p className="text-xs sm:text-sm text-zinc-400 mb-4">three things. done.</p>
+            <p className="text-xs sm:text-sm text-zinc-400 mb-4">3/3. you did it.</p>
             <button
               onClick={handleShare}
               className="text-xs sm:text-sm text-zinc-900 border-b border-zinc-900 pb-0.5 hover:opacity-50 active:scale-95 transition"
