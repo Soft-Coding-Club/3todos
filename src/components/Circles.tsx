@@ -129,15 +129,20 @@ export default function Circles({ slots, onToggle, onDelete }: Props) {
             style={{
               left: pos.x,
               top: pos.y,
-              transition: "left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease, scale 0.5s ease",
-              opacity: visible[i] ? 1 : 0,
-              scale: visible[i] ? "1" : "0.7",
+              transition: "left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+              mixBlendMode: "multiply",
               pointerEvents: visible[i] ? "auto" : "none",
             }}
           >
             <button
               onClick={() => slot.kind === "active" && onDelete(i)}
-              style={{ width: circleSize, height: circleSize }}
+              style={{
+                width: circleSize,
+                height: circleSize,
+                opacity: visible[i] ? 1 : 0,
+                transform: visible[i] ? "scale(1)" : "scale(0.7)",
+                transition: "opacity 0.5s ease, transform 0.5s ease",
+              }}
               className={`rounded-full flex items-center justify-center transition-colors text-center p-5 ${
                 slot.kind === "done"
                   ? "bg-purple-500"

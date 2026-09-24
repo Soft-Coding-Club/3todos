@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Circles from "@/components/Circles";
 
 interface Todo {
@@ -24,6 +24,7 @@ export default function Home() {
   const [input, setInput] = useState("");
   const [mounted, setMounted] = useState(false);
   const [time, setTime] = useState("");
+  const mainRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -35,6 +36,7 @@ export default function Home() {
   }, []);
 
   const isFull = slots.every((s) => s.kind !== "empty");
+  const allDone = slots.every((s) => s.kind === "done");
 
   const addTodo = () => {
     const trimmed = input.trim();
@@ -68,11 +70,35 @@ export default function Home() {
     });
   };
 
+  const handleShare = async () => {
+    if (!mainRef.current) return;
+    const html2canvas = (await import("html2canvas")).default;
+    const canvas = await html2canvas(mainRef.current, {
+      backgroundColor: "#ffffff",
+      scale: 2,
+      useCORS: true,
+    });
+    canvas.toBlob(async (blob) => {
+      if (!blob) return;
+      const file = new File([blob], "3todos.png", { type: "image/png" });
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], title: "3todos", text: "three things. done." });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "3todos.png";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    }, "image/png");
+  };
+
   const activeTodos = slots.filter((s) => s.kind === "active");
   const doneTodos = slots.filter((s) => s.kind === "done");
 
   return (
-    <main className="relative min-h-svh bg-white overflow-hidden">
+    <main ref={mainRef} className="relative min-h-svh bg-white overflow-hidden">
       <div className="relative z-10 p-4 sm:p-8 max-w-sm">
         <p className="text-xs sm:text-sm text-zinc-900 mb-1" suppressHydrationWarning>
           {new Date().toISOString().slice(0, 10)}{time ? ` ${time}` : ""}
@@ -111,6 +137,23 @@ export default function Home() {
 
       {mounted && <Circles slots={slots} onToggle={toggleSlot} onDelete={deleteSlot} />}
 
+      {allDone && (
+        <div
+          className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+          style={{ animation: "fadeIn 0.8s ease forwards" }}
+        >
+          <div className="text-center pointer-events-auto">
+            <p className="text-xs sm:text-sm text-zinc-400 mb-4">three things. done.</p>
+            <button
+              onClick={handleShare}
+              className="text-xs sm:text-sm text-zinc-900 border-b border-zinc-900 pb-0.5 hover:opacity-50 active:scale-95 transition"
+            >
+              share
+            </button>
+          </div>
+        </div>
+      )}
+
       <footer className="absolute bottom-0 left-0 w-full p-4 sm:p-8 z-10 space-y-1 sm:space-y-1.5">
         <p className="text-xs sm:text-sm text-zinc-900">© 2026. 3todos. All rights reserved.</p>
         <p className="text-xs sm:text-sm text-zinc-900">Inquiries <span style={{ fontFamily: "sans-serif" }}>☞</span> ajangeunajang@gmail.com</p>
@@ -121,6 +164,13 @@ export default function Home() {
           </a>
         </p>
       </footer>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
     </main>
   );
 }
