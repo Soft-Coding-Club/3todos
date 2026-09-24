@@ -72,7 +72,7 @@ export default function Home() {
   const doneTodos = slots.filter((s) => s.kind === "done");
 
   return (
-    <main className="relative min-h-screen bg-white overflow-hidden">
+    <main className="relative min-h-svh bg-white overflow-hidden">
       <div className="relative z-10 p-4 sm:p-8 max-w-sm">
         <p className="text-xs sm:text-sm text-zinc-900 mb-1" suppressHydrationWarning>
           {new Date().toISOString().slice(0, 10)}{time ? ` ${time}` : ""}
